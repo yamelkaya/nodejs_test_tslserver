@@ -6,10 +6,20 @@ var TlsServer = function (){
 
 TlsServer.prototype = {
     init: function(){
-        this.server = tls.createServer(config.server.options, function(cleartextStream) {
+        var server = tls.createServer(config.server.options, function(stream) {
+            if (stream.authorized){
+                console.error("test");
+            }
+            else {
+                console.error(stream.authorizationError);
+            }
         });
-        
-        this.server.listen(config.server.port);
+
+        server.listen(config.server.port, function(){
+            console.log('server bound');
+        });
+
+        return server;
     }
 }
 
